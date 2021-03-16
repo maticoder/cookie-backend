@@ -4,18 +4,28 @@ module.exports.hello = (req, res) => {
   return res.json("hello");
 };
 
-module.exports.signup = (req, res) => {
-  console.log(req.body);
+module.exports.signin = (req, res) => {
   const errors = validationResult(req);
-  console.log(errors.isEmpty());
-  console.log(errors.array());
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+
+  return res.status(200).json("token");
+};
+
+module.exports.signup = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
 
   // validate input data
 
   // create the new user
 
-  return res.json({
-    name: "john",
-    email: "john@email.com",
-  });
+  return res.status(201).json("User created");
 };
