@@ -7,14 +7,18 @@ module.exports.validateProgress = () => {
     body("id")
       .custom((value) => !isEmpty(value))
       .withMessage("Id cannot be empty")
-      .bail()
-      .isNumeric()
-      .withMessage("Id has to be numeric"),
+      .bail(),
     // .custom(async (value) => {
-    //   const exists = await User.exists({
-    //     id: value,
-    //   });
-    //   console.log(exists);
+    //   try {
+    //     const exists = await User.exists({
+    //       _id: value,
+    //     });
+    //     if (!exists) {
+    //       return Promise.reject();
+    //     }
+    //   } catch (err) {
+    //     return Promise.reject();
+    //   }
     // })
     // .withMessage("User with given id does not exist"),
     body("counter")
