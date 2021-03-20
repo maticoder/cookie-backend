@@ -1,8 +1,6 @@
 const { body } = require("express-validator");
 const User = require("../models/User");
-
-const isEmpty = (value) =>
-  value === undefined || value === null || value === "";
+const { isEmpty } = require("../utils/validation");
 
 module.exports.validateSignin = () => {
   return [

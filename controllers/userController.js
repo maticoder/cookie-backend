@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Cookie = require("../models/Cookie.js");
 const { createError } = require("../utils/error");
 
 module.exports.signin = async (req, res) => {
@@ -78,10 +79,15 @@ module.exports.signup = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // create the new user
-  await User.create({
+  const user = await User.create({
     name,
     email,
     password: hashedPassword,
+  });
+
+  await Cookie.create({
+    userId: user.id,
+    counter: 0,
   });
 
   return res.status(201).json({
