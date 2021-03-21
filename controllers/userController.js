@@ -88,6 +88,7 @@ module.exports.signup = async (req, res) => {
   await Cookie.create({
     userId: user.id,
     counter: 0,
+    achievements: [],
   });
 
   return res.status(201).json({

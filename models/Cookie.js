@@ -13,6 +13,10 @@ const cookieSchema = new mongoose.Schema({
     unique: false,
     default: 0,
   },
+  achievements: {
+    type: Array,
+    default: [],
+  },
 });
 
 module.exports = mongoose.model("Cookie", cookieSchema);

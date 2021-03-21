@@ -1,9 +1,19 @@
 const router = require("express").Router();
 const auth = require("../auth/auth");
-const { hello, progress } = require("../controllers/cookieController");
-const { validateProgress } = require("../validation/cookieValidation");
+const {
+  saveProgress,
+  saveAchievement,
+  getUserData,
+  getAchievements,
+} = require("../controllers/cookieController");
+const {
+  validateProgress,
+  validateAchievement,
+} = require("../validation/cookieValidation");
 
-router.get("/hello", auth, hello);
-router.patch("/progress", auth, validateProgress(), progress);
+router.get("/data", auth, getUserData);
+router.get("/achievements", auth, getAchievements);
+router.post("/achievement", auth, validateAchievement(), saveAchievement);
+router.patch("/progress", auth, validateProgress(), saveProgress);
 
 module.exports = router;
