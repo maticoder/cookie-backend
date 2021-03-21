@@ -2,34 +2,17 @@ const { body } = require("express-validator");
 const User = require("../models/User");
 const Cookie = require("../models/Cookie");
 const Achievement = require("../models/Achievement");
+const Item = require("../models/Item");
 const { isEmpty } = require("../utils/validation");
 
 module.exports.validateProgress = () => {
   return [
-    body("id")
-      .custom((value) => !isEmpty(value))
-      .withMessage("Id cannot be empty")
-      .bail()
-      .custom(async (value) => {
-        try {
-          const exists = await User.exists({
-            _id: value,
-          });
-          if (!exists) {
-            return Promise.reject();
-          }
-        } catch (err) {
-          return Promise.reject();
-        }
-      })
-      .withMessage("User with given id does not exist"),
     body("counter")
       .custom((value) => !isEmpty(value))
       .withMessage("Counter cannot be empty")
       .bail()
       .isNumeric()
       .withMessage("Counter has to be numeric"),
-    body("achievements").isArray().withMessage("Achievements must be an array"),
   ];
 };
 
@@ -54,6 +37,48 @@ module.exports.validateAchievement = () => {
         }
       })
       .withMessage("Achievement with given id does not exist"),
+    body("counter")
+      .custom((value) => !isEmpty(value))
+      .withMessage("Counter cannot be empty")
+      .bail()
+      .isNumeric()
+      .withMessage("Counter has to be numeric"),
+  ];
+};
+
+module.exports.validateItem = () => {
+  return [
+    body("id")
+      .custom((value) => !isEmpty(value))
+      .withMessage("Id cannot be empty")
+      .bail()
+      .custom(async (value) => {
+        try {
+          const exists = await Item.exists({
+            _id: value,
+          });
+          if (!exists) {
+            return Promise.reject();
+          }
+        } catch (err) {
+          return Promise.reject();
+        }
+      })
+      .withMessage("Item with given id does not exist")
+      .bail()
+      .custom(async (value, { req }) => {
+        try {
+          const item = await Item.findOne({
+            _id: value,
+          });
+          if (item.prize > req.body.counter) {
+            return Promise.reject();
+          }
+        } catch (err) {
+          return Promise.reject();
+        }
+      })
+      .withMessage("You cannot buy this item"),
     body("counter")
       .custom((value) => !isEmpty(value))
       .withMessage("Counter cannot be empty")

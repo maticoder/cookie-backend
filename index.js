@@ -17,7 +17,7 @@ app.use(
   })
 );
 
-const userRoute = require("./routes/userRoute");
+const userRoute = require("./routes/userRoutes");
 const cookieRoute = require("./routes/cookieRoutes");
 
 app.use("/api/user", userRoute);

@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Cookie = require("../models/Cookie.js");
+const Item = require("../models/Item.js");
 const { createError } = require("../utils/error");
 
 module.exports.signin = async (req, res) => {
@@ -16,7 +17,6 @@ module.exports.signin = async (req, res) => {
 
   const { email, password } = req.body;
 
-  // check if user exists
   try {
     const user = await User.findOne({ email });
 
@@ -49,7 +49,7 @@ module.exports.signin = async (req, res) => {
       },
       process.env.SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "7d",
       }
     );
 
@@ -85,10 +85,15 @@ module.exports.signup = async (req, res) => {
     password: hashedPassword,
   });
 
+  const item = await Item.findOne({
+    value: 1,
+  });
+
   await Cookie.create({
     userId: user.id,
     counter: 0,
     achievements: [],
+    item: item.id,
   });
 
   return res.status(201).json({

@@ -17,6 +17,11 @@ const cookieSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  item: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Item",
+    require: true,
+  },
 });
 
 module.exports = mongoose.model("Cookie", cookieSchema);
